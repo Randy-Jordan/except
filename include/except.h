@@ -1,5 +1,9 @@
 #ifndef EXCEPT_INCLUDED
 #define EXCEPT_INCLUDED
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stddef.h>
 #include <setjmp.h>
 
 struct Exception {
@@ -8,7 +12,7 @@ struct Exception {
 typedef struct Exception Exception;
 
 struct ExceptFrame {
-	ExceptFrame *prev;
+	struct ExceptFrame *prev;
 	jmp_buf env;
 	const char *file;
 	int line;
@@ -18,6 +22,9 @@ typedef struct ExceptFrame ExceptFrame;
 
 enum { EXCEPT_ENTERED, EXCEPT_RAISED, EXCEPT_HANDLED, EXCEPT_FINALIZED};
 void hard_fail(const char* fmt, ...);
+
+extern ExceptFrame *except_stack; // Global exception stack
+extern const Exception Assert_Failed;
 
 #define RAISE(e) except_raise(&(e), __FILE__, __LINE__)
 #define RERAISE except_raise(ExceptFrame.exception, \
