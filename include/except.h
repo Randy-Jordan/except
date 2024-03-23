@@ -30,7 +30,7 @@ extern const Exception assert_failed;
 
 #undef ASSERT
 #ifdef NDEBUG
-#define assert(e) ((void)0)
+#define ASSERT(e) ((void)0)
 #else
 extern void assert(int e);
 #define ASSERT(e) ((void)((e)||(RAISE(assert_failed),0)))

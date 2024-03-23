@@ -39,7 +39,6 @@ void except_raise(const Exception *e, const char *file,int line) {
 	except_stack = except_stack->prev;
 	longjmp(p->env, EXCEPT_RAISED);
 }
-
 void (assert)(int e) {
 	ASSERT(e);
 }
