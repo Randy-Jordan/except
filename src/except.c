@@ -1,10 +1,11 @@
 #include "../include/except.h"
 #include <string.h>
 #include <stdarg.h>
-ExceptFrame *except_stack = NULL;
-const Exception assert_failed = { "Assertion failed" };
 
-void hard_fail(const char *fmt, ...){
+ExceptFrame *except_stack = NULL; // Global exception stack.
+const Exception assert_failed = { "Assertion failed" }; // If ASSERT fails.
+
+void hard_fail(const char *fmt, ...){ // Error msg and exit.
     int errno_save;
     va_list ap;
     // Any syscall or library can change errno, need to save it.
@@ -25,18 +26,20 @@ void hard_fail(const char *fmt, ...){
     exit(EXIT_FAILURE);
 }
 void except_raise(const Exception *e, const char *file,int line) {
+    // An exception was raised, grab the exception stack.
 	ExceptFrame *p = except_stack;
-	//assert(e);
-	if (p == NULL) {
-        char *msg = NULL;
-        if(!e->reason) msg = "NULL MSG";
-        msg = (char *)e->reason;
-		hard_fail("Uncaught exception: %s | Address: 0x%p | raised at %s@%d\n",msg,(void *)e,file,line);
+    assert(e != NULL);  // Ensure exception pointer is not NULL
+	if (p == NULL) { // Uncaught Exception
+        const char *msg = e->reason ? e->reason : "Uncaught Exception"; 
+		hard_fail("%s | Address: 0x%p | raised at %s@%d\n",msg,(void *)e,file,line);
     }
-	p->exception = e;
+   // Set the exception details to the current frame. 
+	p->exception = e; // Exception reason
 	p->file = file;
 	p->line = line;
+    // Move to the previous frame in the stack.
 	except_stack = except_stack->prev;
+    // Jump to the saved context environment.
 	longjmp(p->env, EXCEPT_RAISED);
 }
 void (assert)(int e) {

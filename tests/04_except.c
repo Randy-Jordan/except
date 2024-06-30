@@ -58,8 +58,9 @@ int main(void){
  
     printf("\n\n");
     LOG_DEBUG(stdout,"Testing uncaught exceptions");
-    RAISE(assert_failed);
-
+    Exception n = {NULL};
+    RAISE(n);
+    
     return EXIT_SUCCESS;
     
 }
