@@ -38,7 +38,14 @@ extern const Exception assert_failed; // Forward declaration for assert.
 #else
 extern void assert(int e);
 #define ASSERT(e) ((void)((e)||(RAISE(assert_failed),0)))
-#define TEST(expr) ex_test(expr)
+#define TEST(expr) \
+    do { \
+        if (expr) { \
+            printf(__DATE__" " __TIME__ " [%s@%d] " "\x1b[32m" "| PASSED | "  "(%s)" "\x1b[0m \n", __FILE__, __LINE__, #expr); \
+        } else { \
+            printf(__DATE__" " __TIME__ " [%s@%d] " "\x1b[31m" "| FAILED | "  "(%s)" "\x1b[0m \n", __FILE__, __LINE__, #expr); \
+        } \
+    } while (0)
 #endif
 
 // Raise an Exception.
