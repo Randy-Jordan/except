@@ -61,10 +61,10 @@ test: $(LIB) $(TEST)/bin $(TESTBINS)
 		EXIT_CODE=$$?; \
 		TEST_NAME=$(notdir $$test); \
 		if [ $$EXIT_CODE -eq 0 ]; then \
-			echo -n "\033[0;32m$$TEST_NAME: EXIT CODE: $$EXIT_CODE (SUCCESS)\033[0m"; \
+			echo "\033[0;32m$$TEST_NAME: EXIT CODE: $$EXIT_CODE (SUCCESS)\033[0m"; \
 			SUCCESS_COUNT=$$((SUCCESS_COUNT + 1)); \
 		else \
-			echo -n "\033[0;31m$$TEST_NAME: EXIT CODE: $$EXIT_CODE (FAILURE)\033[0m"; \
+			echo "\033[0;31m$$TEST_NAME: EXIT CODE: $$EXIT_CODE (FAILURE)\033[0m"; \
 			FAILURE_COUNT=$$((FAILURE_COUNT + 1)); \
 		fi; \
 	done; \
